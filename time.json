@@ -1,0 +1,108 @@
+{
+  "lines": {
+    "purple": {
+      "color": "#6A1B9A",
+      "segments": [
+        { "from": "Challaghatta", "to": "Kengeri", "time": 3 },
+        { "from": "Kengeri", "to": "Kengeri Bus Terminal", "time": 3 },
+        { "from": "Kengeri Bus Terminal", "to": "Pattanagere", "time": 2 },
+        { "from": "Pattanagere", "to": "Jnanabharathi", "time": 3 },
+        { "from": "Jnanabharathi", "to": "Rajarajeshwari Nagar", "time": 2 },
+        { "from": "Rajarajeshwari Nagar", "to": "Nayandahalli", "time": 1 },
+        { "from": "Nayandahalli", "to": "Mysuru Road", "time": 3 },
+        { "from": "Mysuru Road", "to": "Deepanjali Nagar", "time": 2 },
+        { "from": "Deepanjali Nagar", "to": "Attiguppe", "time": 2 },
+        { "from": "Attiguppe", "to": "Vijayanagar", "time": 2 },
+        { "from": "Vijayanagar", "to": "Hosahalli", "time": 1 },
+        { "from": "Hosahalli", "to": "Magadi Road", "time": 3 },
+        { "from": "Magadi Road", "to": "KSR Railway Station", "time": 2 },
+        { "from": "KSR Railway Station", "to": "Majestic", "time": 2 },
+        { "from": "Majestic", "to": "Central College", "time": 2 },
+        { "from": "Central College", "to": "Vidhana Soudha", "time": 1 },
+        { "from": "Vidhana Soudha", "to": "Cubbon Park", "time": 2 },
+        { "from": "Cubbon Park", "to": "MG Road", "time": 3 },
+        { "from": "MG Road", "to": "Trinity", "time": 2 },
+        { "from": "Trinity", "to": "Halasuru", "time": 1 },
+        { "from": "Halasuru", "to": "Indiranagar", "time": 3 },
+        { "from": "Indiranagar", "to": "Swami Vivekananda Road", "time": 3 },
+        { "from": "Swami Vivekananda Road", "to": "Baiyappanahalli", "time": 2 },
+        { "from": "Baiyappanahalli", "to": "Benniganahalli", "time": 3 },
+        { "from": "Benniganahalli", "to": "Krishnarajapura", "time": 2 },
+        { "from": "Krishnarajapura", "to": "Singayyanapalya", "time": 3 },
+        { "from": "Singayyanapalya", "to": "Garudacharpalya", "time": 2 },
+        { "from": "Garudacharpalya", "to": "Hoodi", "time": 3 },
+        { "from": "Hoodi", "to": "Seetharama Palya", "time": 2 },
+        { "from": "Seetharam Palya", "to": "Kundalahalli", "time": 2 },
+        { "from": "Kundalahalli", "to": "Nallur Halli", "time": 1 },
+        { "from": "Nallur Halli", "to": "Sri Sathya Sai Hospital", "time": 2 },
+        { "from": "Sri Sathya Sai Hospital", "to": "Pattandur Agrahara", "time": 3 },
+        { "from": "Pattandur Agrahara", "to": "Kadugodi Tree Park", "time": 2 },
+        { "from": "Kadugodi Tree Park", "to": "Hopefarm Channasandra", "time": 3 },
+        { "from": "Hopefarm Channasandra", "to": "Whitefield (Kadugodi)", "time": 3 }
+      ]
+    },
+
+    "green": {
+      "color": "#2E7D32",
+      "segments": [
+        { "from": "Madavara", "to": "Chikkabidarakallu", "time": 2 },
+        { "from": "Chikkabidarakallu", "to": "Manjunath Nagar", "time": 2 },
+        { "from": "Manjunath Nagar", "to": "Nagasandra", "time": 2 },
+        { "from": "Nagasandra", "to": "Dasarahalli", "time": 2 },
+        { "from": "Dasarahalli", "to": "Jalahalli", "time": 2 },
+        { "from": "Jalahalli", "to": "Peenya Industry", "time": 2 },
+        { "from": "Peenya Industry", "to": "Peenya", "time": 1 },
+        { "from": "Peenya", "to": "Goraguntepalya", "time": 2 },
+        { "from": "Goraguntepalya", "to": "Yeshwantpur", "time": 2 },
+        { "from": "Yeshwantpur", "to": "Sandal Soap Factory", "time": 1 },
+        { "from": "Sandal Soap Factory", "to": "Mahalakshmi", "time": 2 },
+        { "from": "Mahalakshmi", "to": "Rajajinagar", "time": 2 },
+        { "from": "Rajajinagar", "to": "Mahakavi Kuvempu Road", "time": 2 },
+        { "from": "Mahakavi Kuvempu Road", "to": "Srirampura", "time": 1 },
+        { "from": "Srirampura", "to": "Sampige Road", "time": 3 },
+        { "from": "Sampige Road", "to": "Majestic", "time": 2 },
+        { "from": "Majestic", "to": "Chickpete", "time": 2 },
+        { "from": "Chickpete", "to": "KR Market", "time": 2 },
+        { "from": "KR Market", "to": "National College", "time": 2 },
+        { "from": "National College", "to": "Lalbagh", "time": 2 },
+        { "from": "Lalbagh", "to": "South End Circle", "time": 2 },
+        { "from": "South End Circle", "to": "Jayanagar", "time": 1 },
+        { "from": "Jayanagar", "to": "RV Road", "time": 2 },
+        { "from": "RV Road", "to": "Banashankari", "time": 3 },
+        { "from": "Banashankari", "to": "Jaya Prakash Nagar", "time": 1 },
+        { "from": "Jaya Prakash Nagar", "to": "Yelachenahalli", "time": 3 },
+        { "from": "Yelachenahalli", "to": "Konanakunte Cross", "time": 2 },
+        { "from": "Konanakunte Cross", "to": "Doddakallasandra", "time": 1 },
+        { "from": "Doddakallasandra", "to": "Vajarahalli", "time": 3 },
+        { "from": "Vajarahalli", "to": "Thalaghattapura", "time": 2 },
+        { "from": "Thalaghattapura", "to": "Silk Institute", "time": 2 }
+      ]
+    },
+
+    "yellow": {
+      "color": "#F9A825",
+      "segments": [
+        { "from": "RV Road", "to": "Ragigudda", "time": 3 },
+        { "from": "Ragigudda", "to": "Jayadeva Hospital", "time": 2 },
+        { "from": "Jayadeva Hospital", "to": "BTM Layout", "time": 3 },
+        { "from": "BTM Layout", "to": "Central Silk Board", "time": 3 },
+        { "from": "Central Silk Board", "to": "Bommanahalli", "time": 2 },
+        { "from": "Bommanahalli", "to": "Hongasandra", "time": 2 },
+        { "from": "Hongasandra", "to": "Kudlu Gate", "time": 2 },
+        { "from": "Kudlu Gate", "to": "Singasandra", "time": 2 },
+        { "from": "Singasandra", "to": "Hosa Road", "time": 2 },
+        { "from": "Hosa Road", "to": "Beratena Agrahara", "time": 2 },
+        { "from": "Beratena Agrahara", "to": "Electronic City", "time": 2 },
+        { "from": "Electronic City", "to": "Infosys Konappana Agrahara", "time": 2 },
+        { "from": "Infosys Konappana Agrahara", "to": "Huskur Road", "time": 2 },
+        { "from": "Huskur Road", "to": "Biocon Hebbagodi", "time": 2 },
+        { "from": "Biocon Hebbagodi", "to": "Delta Electronics Bommasandra", "time": 2 }
+      ]
+    }
+  },
+
+  "interchanges": [
+    { "station": "Majestic", "lines": ["purple", "green"] },
+    { "station": "RV Road", "lines": ["green", "yellow"] }
+  ]
+}

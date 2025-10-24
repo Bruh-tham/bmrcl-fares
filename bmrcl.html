@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namma Metro Fare Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: #f4f6fb;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header-bar {
+            background: #fff;
+            color: #2563eb;
+            padding: 18px 0 10px 0;
+            text-align: center;
+            border-bottom: 2px solid #2563eb;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.07);
+        }
+        .header-bar .logo-img {
+            height: 38px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .header-bar .title {
+            font-size: 1.25em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            vertical-align: middle;
+        }
+        .header-bar .subtitle {
+            font-size: 0.98em;
+            color: #555;
+            margin-top: 2px;
+        }
+        .container {
+            margin: 0 auto;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(37,99,235,0.09);
+            padding: 32px 22px 22px 22px;
+        }
+        label {
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 1.12em;
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .icon-select {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .icon-select .fa, .icon-select .ticket-icon {
+            margin-right: 10px;
+            font-size: 1.25em;
+            color: #2563eb;
+            min-width: 24px;
+            text-align: center;
+        }
+        .icon-select input[type="text"] {
+            flex: 1;
+            padding: 12px 12px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1.08em;
+            background: #f7f7fa;
+            color: #222;
+            transition: border 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.04);
+        }
+        .icon-select input[type="text"]:focus {
+            outline: none;
+            border: 1.5px solid #2563eb;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.10);
+            background: #fff;
+        }
+        #result {
+            font-size: 1.12em;
+            margin-top: 24px;
+            background: #f6f8ff;
+            padding: 18px 14px;
+            border-radius: 8px;
+            color: #222;
+            min-height: 40px;
+            border: 1px solid #d1d1e0;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.04);
+        }
+        .footer {
+            margin: 28px 0 0 0;
+            text-align: center;
+            color: #888;
+            font-size: 1em;
+        }
+        .reset-btn {
+            display: block;
+            width: 100%;
+            margin-top: 16px;
+            padding: 13px 0;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            font-size: 1.08em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .reset-btn:hover, .reset-btn:focus {
+            background: #1746a0;
+        }
+        .main-flex {
+            display: flex;
+            gap: 4vw;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        .form-container {
+            flex: 1 1 340px;
+            min-width: 280px;
+            max-width: 400px;
+        }
+        .map-container {
+            flex: 1 1 380px;
+            min-width: 260px;
+            max-width: 480px;
+            text-align: center;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(37,99,235,0.09);
+            padding: 24px 18px 18px 18px;
+            margin-top: 0;
+            height: fit-content;
+        }
+        .metro-map-img {
+            width: 100%;
+            max-width: 440px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.12);
+            margin-top: 8px;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        .metro-map-img:hover {
+            box-shadow: 0 8px 32px rgba(37,99,235,0.18);
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            max-width: 98vw;
+            max-height: 96vh;
+            box-shadow: 0 8px 32px rgba(37,99,235,0.18);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .modal-image {
+            max-width: 90vw;
+            max-height: 80vh;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.18);
+        }
+        .close-modal {
+            position: absolute;
+            top: 8px;
+            right: 16px;
+            font-size: 2em;
+            color: #2563eb;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 2;
+        }
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 34px;
+            right: 0;
+            background: #fff;
+            border: 1.5px solid #2563eb;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.10);
+            z-index: 10;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            animation: fadeIn 0.2s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-list div {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 1.08em;
+            border-bottom: 1px solid #f4f6fb;
+            transition: background 0.15s;
+        }
+        .dropdown-list div:last-child {
+            border-bottom: none;
+        }
+        .dropdown-list div:hover {
+            background: #e8f0fe;
+            color: #2563eb;
+            font-weight: 500;
+        }
+        .clear-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 1.3em;
+            cursor: pointer;
+            padding: 0 4px;
+            z-index: 2;
+            transition: color 0.2s;
+        }
+        .clear-btn:hover {
+            color: #2563eb;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 14px 4px 18px 4px;
+            }
+            .header-bar .logo-img { height: 30px; }
+            .header-bar .title { font-size: 1.08em; }
+            #result { font-size: 1em; padding: 13px 7px; }
+        }
+        @media (max-width: 900px) {
+            .main-flex {
+                flex-direction: column;
+                align-items: center;
+                gap: 24px;
+            }
+            .form-container,
+            .map-container {
+                max-width: 98vw;
+                width: 98vw;
+                margin: 0 auto;
+                box-sizing: border-box;
+                padding: 18px 8px 18px 8px;
+                border-radius: 16px;
+                box-shadow: 0 4px 24px rgba(37,99,235,0.09);
+                background: #fff;
+            }
+            .map-container {
+                margin-top: 0;
+            }
+            .metro-map-img {
+                max-width: 100%;
+                width: 100%;
+                height: auto;
+                border-radius: 12px;
+                margin-top: 8px;
+            }
+            .modal-image {
+                max-width: 96vw;
+                max-height: 80vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <img src="https://english.bmrc.co.in/images/metro/logo.svg" alt="Namma Metro Logo" class="logo-img">
+        <span class="title">Namma Metro Fare Calculator</span>
+    </div>
+    <div class="main-flex">
+        <div class="container form-container">
+            <form autocomplete="off" onsubmit="event.preventDefault();">
+                <!-- Source Station -->
+                <div class="form-group">
+                    <label for="source">Source Station</label>
+                    <div class="icon-select">
+                        <i class="fa fa-location-dot"></i>
+                        <input type="text" id="source" placeholder="Type or select source" autocomplete="off" oninput="filterStations('source')" onclick="showDropdown('source')">
+                        <button type="button" class="clear-btn" onclick="clearInput('source')">&times;</button>
+                        <div class="dropdown-list" id="source-dropdown"></div>
+                    </div>
+                </div>
+                <!-- Destination Station -->
+                <div class="form-group">
+                    <label for="destination">Destination Station</label>
+                    <div class="icon-select">
+                        <i class="fa fa-flag-checkered"></i>
+                        <input type="text" id="destination" placeholder="Type or select destination" autocomplete="off" oninput="filterStations('destination')" onclick="showDropdown('destination')">
+                        <button type="button" class="clear-btn" onclick="clearInput('destination')">&times;</button>
+                        <div class="dropdown-list" id="destination-dropdown"></div>
+                    </div>
+                </div>
+                <button type="button" class="reset-btn" onclick="resetForm()">Reset</button>
+            </form>
+            <div id="result"></div>
+            <div class="footer">
+                For Bengaluru Namma Metro - 2025
+            </div>
+        </div>
+        <div class="container map-container">
+            <img src="Namma Metro Map.png" alt="Namma Metro Map" class="metro-map-img" id="metroMapImg" onclick="openModal()">
+            <div style="font-size:0.98em; color:#555; margin-top:6px;">Namma Metro Map</div>
+        </div>
+    </div>
+    <!-- Modal for map display -->
+    <div class="modal" id="mapModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <img src="Namma Metro Map.png" alt="Namma Metro Map" class="modal-image" id="modalMapImg">
+            <div style="font-size:1em; color:#2563eb; margin-top:8px;">Click outside or &times; to close</div>
+        </div>
+    </div>
+    <script>
+        // Lines & stations as per latest update
+        const lines = {
+            purple: [
+                "Challaghatta", "Kengeri", "Kengeri Bus Terminal", "Pattanagere", "Jnanabharathi", "Rajarajeshwari Nagar", "Nayandahalli", "Mysore Road", "Deepanjali Nagar", "Attiguppe", "Vijayanagar", "Hosahalli", "Magadi Road", "KSR Railway Station", "Majestic", "Central College", "Vidhana Soudha", "Cubbon Park", "MG Road", "Trinity", "Halasuru", "Indiranagar", "Swami Vivekananda Road", "Baiyappanahalli", "Benniganahalli", "Krishnarajapura", "Singayyanapalya", "Garudacharpalya", "Hoodi", "Sitharama Palya", "Kundalahalli", "Nallur Halli", "Sri Sathya Sai Hospital", "Pattandur Agrahara", "Kadugodi Tree Park", "Hopefarm Channasandra", "Whitefield (Kadugodi)"
+            ],
+            green: [
+                "Madavara", "Chikkabidarakallu", "Manjunath Nagar", "Nagasandra", "Dasarahalli", "Jalahalli", "Peenya Industry", "Peenya", "Goraguntepalya", "Yeshwantpur", "Sandal Soap Factory", "Mahalakshmi", "Rajajinagar", "Mahakavi Kuvempu Road", "Srirampura", "Sampige Road", "Majestic", "Chickpete", "KR Market", "National College", "Lalbagh", "South End Circle", "Jayanagar", "RV Road", "Banashankari", "Jaya Prakash Nagar", "Yelachenahalli", "Konanakunte Cross", "Doddakallasandra", "Vajarahalli", "Thalaghattapura", "Silk Institute"
+            ],
+            yellow: [
+                "RV Road", "Ragigudda", "Jayadeva Hospital", "BTM Layout", "Central Silk Board", "Bommanahalli", "Hongasandra", "Kudlu Gate", "Singasandra", "Hosa Road", "Beratena Agrahara", "Electronic City", "Infosys Konappana Agrahara", "Huskur Road", "Biocon Hebbagodi", "Delta Electronics Bommasandra"
+            ]
+        };
+
+        // Build the network graph
+        const graph = {};
+        Object.values(lines).forEach(line => {
+            for (let i = 0; i < line.length - 1; i++) {
+                const s1 = line[i];
+                const s2 = line[i + 1];
+                if (!graph[s1]) graph[s1] = [];
+                if (!graph[s2]) graph[s2] = [];
+                if (!graph[s1].includes(s2)) graph[s1].push(s2);
+                if (!graph[s2].includes(s1)) graph[s2].push(s1);
+            }
+        });
+
+        // All stations list, sorted
+        const allStations = [...new Set(Object.values(lines).flat())].sort();
+
+        // Populate dropdowns
+        function populateStations() {
+            const sourceSelect = document.getElementById('source');
+            const destinationSelect = document.getElementById('destination');
+            allStations.forEach(station => {
+                const option1 = document.createElement('option');
+                option1.value = option1.text = station;
+                sourceSelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = option2.text = station;
+                destinationSelect.appendChild(option2);
+            });
+        }
+
+        // Fare slabs
+        const fareSlabs = [
+            { maxStations: 2, fare: 10 },
+            { maxStations: 4, fare: 20 },
+            { maxStations: 6, fare: 30 },
+            { maxStations: 8, fare: 40 },
+            { maxStations: 10, fare: 50 },
+            { maxStations: 15, fare: 60 },
+            { maxStations: 20, fare: 70 },
+            { maxStations: 25, fare: 80 },
+            { maxStations: 30, fare: 90 },
+            { maxStations: Infinity, fare: 90 }
+        ];
+
+        // Shortest path finder
+        function bfsShortestPath(source, destination) {
+            if (source === destination) return 0;
+            const queue = [[source, 0]];
+            const visited = new Set([source]);
+            while (queue.length > 0) {
+                const [current, dist] = queue.shift();
+                for (let neighbor of graph[current] || []) {
+                    if (!visited.has(neighbor)) {
+                        visited.add(neighbor);
+                        if (neighbor === destination) return dist + 1;
+                        queue.push([neighbor, dist + 1]);
+                    }
+                }
+            }
+            return -1;
+        }
+
+        function getBaseFare(stationsExclOrigin) {
+            if (stationsExclOrigin === 0) return 10;
+            for (let slab of fareSlabs) {
+                if (stationsExclOrigin <= slab.maxStations) return slab.fare;
+            }
+            return 90;
+        }
+
+        function calculateFare() {
+            const source = document.getElementById("source").value;
+            const destination = document.getElementById("destination").value;
+            const resultDiv = document.getElementById("result");
+
+            if (!source || !destination) {
+                resultDiv.style.background = "#fffbe6";
+                resultDiv.style.color = "#b76607";
+                resultDiv.innerHTML = "Please select both <b>source</b> and <b>destination</b> stations.";
+                return;
+            }
+            if (source === destination) {
+                resultDiv.style.background = "#ffeaea";
+                resultDiv.style.color = "#b10019";
+                resultDiv.innerHTML = "Source and destination must be different.";
+                return;
+            }
+
+            const stationsExclOrigin = bfsShortestPath(source, destination);
+            if (stationsExclOrigin < 0) {
+                resultDiv.style.background = "#ffeaea";
+                resultDiv.style.color = "#d32f2f";
+                resultDiv.innerHTML = "No valid metro route found between selected stations.";
+                return;
+            }
+
+            let baseFare = getBaseFare(stationsExclOrigin);
+            let cscPeakFare = baseFare * 0.95;
+            let cscNonPeakFare = baseFare * 0.90;
+
+            let fareHtml = `
+                <div style="margin-bottom:8px;">
+                    <span style="color:#2563eb;font-weight:600;">
+                        Stations travelled (excluding origin): ${stationsExclOrigin}
+                    </span>
+                </div>
+                <b>Token Fare:</b> ₹${baseFare}<br>
+                <b>CSC Fare (Peak Hours):</b> ₹${cscPeakFare.toFixed(2)}<br>
+                <b>CSC Fare (Non-Peak Hours):</b> ₹${cscNonPeakFare.toFixed(2)}
+            `;
+
+            resultDiv.style.background = "#f6f8ff";
+            resultDiv.style.color = "#222";
+            resultDiv.innerHTML = fareHtml;
+        }
+
+        function resetForm() {
+            const src = document.getElementById("source");
+            const dst = document.getElementById("destination");
+            if (src) src.value = '';
+            if (dst) dst.value = '';
+            calculateFare();
+        }
+
+        function toggleTicketIcon() {
+            const typeEl = document.getElementById("ticketType");
+            if (!typeEl) return;
+            const type = typeEl.value;
+            const tokenIcon = document.getElementById("tokenIcon");
+            const cardIcon = document.getElementById("cardIcon");
+            if (tokenIcon) tokenIcon.style.display = type === "token" ? "inline" : "none";
+            if (cardIcon) cardIcon.style.display = type === "csc" ? "inline" : "none";
+        }
+
+        // Modal logic
+        function openModal() {
+            document.getElementById('mapModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('mapModal').style.display = 'none';
+        }
+
+        document.getElementById('mapModal').onclick = function(e) {
+            if (e.target === this) closeModal();
+        };
+
+        function filterStations(type) {
+            const input = document.getElementById(type);
+            const dropdown = document.getElementById(type + '-dropdown');
+            const value = input.value.toLowerCase();
+            dropdown.innerHTML = '';
+            let filtered = allStations.filter(station => station.toLowerCase().includes(value));
+            if (filtered.length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+            filtered.forEach(station => {
+                const div = document.createElement('div');
+                div.textContent = station;
+                div.onclick = function() {
+                    input.value = station;
+                    dropdown.style.display = 'none';
+                    calculateFare();
+                };
+                dropdown.appendChild(div);
+            });
+            dropdown.style.display = 'block';
+        }
+
+        function showDropdown(type) {
+            filterStations(type);
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.icon-select')) {
+                const s = document.getElementById('source-dropdown');
+                const d = document.getElementById('destination-dropdown');
+                if (s) s.style.display = 'none';
+                if (d) d.style.display = 'none';
+            }
+        });
+
+        function clearInput(type) {
+            const el = document.getElementById(type);
+            if (el) el.value = '';
+            const dd = document.getElementById(type + '-dropdown');
+            if (dd) dd.style.display = 'none';
+            calculateFare();
+        }
+
+        // Initial setup
+        window.onload = function() {
+            populateStations();
+            toggleTicketIcon();
+            calculateFare();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Namma Metro Fare Calculator + Route Visualizer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; }
+    body { background:#f4f6fb; font-family:'Segoe UI', Arial, sans-serif; margin:0; padding:0; }
+    .header-bar { background:#fff; color:#2563eb; padding:18px 0 10px; text-align:center; border-bottom:2px solid #2563eb; margin-bottom:18px; box-shadow:0 2px 8px rgba(37,99,235,.07); }
+    .logo-img { height:38px; vertical-align:middle; margin-right:10px; }
+    .title { font-size:1.25em; font-weight:700; letter-spacing:1px; vertical-align:middle; }
+    .container { margin:0 auto; max-width:400px; background:#fff; border-radius:14px; box-shadow:0 4px 24px rgba(37,99,235,.09); padding:32px 22px 22px; }
+    label { font-weight:600; color:#222; margin-bottom:8px; display:block; font-size:1.12em; }
+    .form-group { margin-bottom:22px; }
+    .icon-select { display:flex; align-items:center; position:relative; }
+    .icon-select .fa { margin-right:10px; font-size:1.25em; color:#2563eb; min-width:24px; text-align:center; }
+    .icon-select input[type="text"] { flex:1; padding:12px; border:1.5px solid #d1d5db; border-radius:8px; font-size:1.08em; background:#f7f7fa; color:#222; transition:border .2s, box-shadow .2s; box-shadow:0 2px 8px rgba(37,99,235,.04); }
+    .icon-select input[type="text"]:focus { outline:none; border:1.5px solid #2563eb; box-shadow:0 4px 16px rgba(37,99,235,.10); background:#fff; }
+    .clear-btn { position:absolute; right:8px; top:50%; transform:translateY(-50%); background:transparent; border:none; color:#888; font-size:1.3em; cursor:pointer; padding:0 4px; z-index:2; }
+    .clear-btn:hover { color:#2563eb; }
+    #result { font-size:1.05em; line-height: 1.6; margin-top:14px; background:#f6f8ff; padding:14px; border-radius:8px; color:#222; min-height:40px; border:1px solid #d1d1e0; font-weight:500; box-shadow:0 2px 8px rgba(37,99,235,.04); }
+    .footer { margin:18px 0 0; text-align:center; color:#888; font-size:1em; }
+    .reset-btn { display:block; width:100%; margin-top:16px; padding:13px 0; background:#2563eb; color:#fff; border:none; border-radius:7px; font-size:1.08em; font-weight:600; cursor:pointer; }
+    .reset-btn:hover { background:#1746a0; }
+    .main-flex { display:flex; gap:4vw; justify-content:center; align-items:flex-start; flex-wrap:wrap; }
+    .form-container { flex:1 1 340px; min-width:280px; max-width:400px; }
+    .map-container { flex:1 1 380px; min-width:260px; max-width:480px; text-align:center; background:#fff; border-radius:18px; box-shadow:0 8px 32px rgba(37,99,235,.09); padding:24px 18px 18px; height:fit-content; }
+    .metro-map-img { width:100%; max-width:440px; height:auto; border-radius:12px; box-shadow:0 4px 16px rgba(37,99,235,.12); margin-top:8px; cursor:pointer; }
+    .dropdown-list { position:absolute; top:100%; left:36px; right:8px; background:#fff; border:1.5px solid #2563eb; border-radius:0 0 10px 10px; box-shadow:0 6px 22px rgba(37,99,235,.12); z-index:9999; max-height:220px; overflow-y:auto; display:none; animation:fadeIn .18s ease-out; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-6px);} to { opacity:1; transform:translateY(0);} }
+    .dropdown-list div { padding:10px 12px; cursor:pointer; font-size:1.02em; border-bottom:1px solid #f4f6fb; }
+    .dropdown-list div:last-child { border-bottom:none; }
+    .dropdown-list div:hover { background:#e8f0fe; color:#2563eb; font-weight:500; }
+    .route-card { margin-top:16px; background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 8px 24px rgba(37,99,235,.06); overflow:hidden; }
+    .route-header { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; background:#f8fafc; border-bottom:1px solid #eef2f7; }
+    .route-title { font-weight:700; color:#0f172a; }
+    .route-badges { font-size:.92em; color:#334155; }
+    .chip { display:inline-block; padding:.25rem .5rem; border-radius:999px; background:#eaf2ff; color:#1e40af; border:1px solid #bfdbfe; margin-left:.4rem; }
+    .timeline { position: relative; padding: 10px 16px 14px 18px; }
+    .rail-layer { position:absolute; top:0; left:0; right:0; bottom:0; pointer-events:none; }
+    .rail-seg { position:absolute; width:6px; border-radius:3px; }
+    .station-list { position: relative; z-index: 1; }
+    .node { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+    .dot { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; border: 3px solid white; box-shadow: 0 0 0 2px #cbd5e1; }
+    .label { font-weight:600; color:#0f172a; }
+    .meta { font-size:.92em; color:#475569; margin: -4px 0 12px 30px; padding: 6px 10px; background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 6px; }
+    .toggle-btn { margin: 4px 0 8px 30px; background:transparent; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; color: #475569; text-align: left; width: calc(100% - 30px); }
+    .toggle-btn:hover { background: #f1f5f9; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <img src="https://english.bmrc.co.in/images/metro/logo.svg" alt="Namma Metro Logo" class="logo-img" />
+    <span class="title">Namma Metro Fare & Route</span>
+  </div>
+  <div class="main-flex">
+    <div class="container form-container">
+      <form autocomplete="off" onsubmit="event.preventDefault();">
+        <div class="form-group">
+          <label for="source">Source Station</label>
+          <div class="icon-select">
+            <i class="fa fa-location-dot"></i>
+            <input type="text" id="source" placeholder="Type or select source" autocomplete="off" oninput="filterStations('source')" onclick="showDropdown('source')" />
+            <button type="button" class="clear-btn" onclick="clearInput('source')">&times;</button>
+            <div class="dropdown-list" id="source-dropdown"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="destination">Destination Station</label>
+          <div class="icon-select">
+            <i class="fa fa-flag-checkered"></i>
+            <input type="text" id="destination" placeholder="Type or select destination" autocomplete="off" oninput="filterStations('destination')" onclick="showDropdown('destination')" />
+            <button type="button" class="clear-btn" onclick="clearInput('destination')">&times;</button>
+            <div class="dropdown-list" id="destination-dropdown"></div>
+          </div>
+        </div>
+        <button type="button" class="reset-btn" onclick="resetForm()">Reset</button>
+      </form>
+      <div id="result"></div>
+      <div class="route-card" id="routeCard" style="display:none;">
+        <div class="route-header">
+          <div class="route-title"><i class="fa fa-train-subway"></i> Route Visualizer</div>
+          <div class="route-badges" id="routeBadges"></div>
+        </div>
+        <div class="timeline" id="routeTimeline"></div>
+      </div>
+      <div class="footer">For Bengaluru Namma Metro - 2025</div>
+    </div>
+    <div class="container map-container">
+      <img src="Namma Metro Map.png" alt="Namma Metro Map" class="metro-map-img" id="metroMapImg" />
+      <div style="font-size:.98em; color:#555; margin-top:6px;">Namma Metro Map</div>
+    </div>
+  </div>
+
+  <script>
+    // ----------------- Data -----------------
+    const lines = {
+      purple: ["Challaghatta", "Kengeri", "Kengeri Bus Terminal", "Pattanagere", "Jnanabharathi", "Rajarajeshwari Nagar", "Nayandahalli", "Mysuru Road", "Deepanjali Nagar", "Attiguppe", "Vijayanagar", "Hosahalli", "Magadi Road", "KSR Railway Station", "Majestic", "Central College", "Vidhana Soudha", "Cubbon Park", "MG Road", "Trinity", "Halasuru", "Indiranagar", "Swami Vivekananda Road", "Baiyappanahalli", "Benniganahalli", "Krishnarajapura", "Singayyanapalya", "Garudacharpalya", "Hoodi", "Seetharam Palya", "Kundalahalli", "Nallur Halli", "Sri Sathya Sai Hospital", "Pattandur Agrahara", "Kadugodi Tree Park", "Hopefarm Channasandra", "Whitefield (Kadugodi)"],
+      green: ["Madavara", "Chikkabidarakallu", "Manjunath Nagar", "Nagasandra", "Dasarahalli", "Jalahalli", "Peenya Industry", "Peenya", "Goraguntepalya", "Yeshwantpur", "Sandal Soap Factory", "Mahalakshmi", "Rajajinagar", "Mahakavi Kuvempu Road", "Srirampura", "Sampige Road", "Majestic", "Chickpete", "KR Market", "National College", "Lalbagh", "South End Circle", "Jayanagar", "RV Road", "Banashankari", "Jaya Prakash Nagar", "Yelachenahalli", "Konanakunte Cross", "Doddakallasandra", "Vajarahalli", "Thalaghattapura", "Silk Institute"],
+      yellow: ["RV Road", "Ragigudda", "Jayadeva Hospital", "BTM Layout", "Central Silk Board", "Bommanahalli", "Hongasandra", "Kudlu Gate", "Singasandra", "Hosa Road", "Beratena Agrahara", "Electronic City", "Infosys Konappana Agrahara", "Huskur Road", "Biocon Hebbagodi", "Delta Electronics Bommasandra"]
+    };
+    const lineColors = { purple: "#6A1B9A", green: "#2E7D32", yellow: "#F9A825" };
+
+    const graph = {}, stationLines = {};
+    for (const [line, stations] of Object.entries(lines)) {
+      stations.forEach((st, i) => {
+        stationLines[st] = stationLines[st] || new Set();
+        stationLines[st].add(line);
+        if (i < stations.length - 1) {
+          const a = st, b = stations[i + 1];
+          (graph[a] = graph[a] || new Set()).add(b);
+          (graph[b] = graph[b] || new Set()).add(a);
+        }
+      });
+    }
+    const allStations = Object.keys(stationLines).sort();
+
+    const fareSlabs = [
+      { maxStations: 2, fare: 10 }, { maxStations: 4, fare: 20 },
+      { maxStations: 6, fare: 30 }, { maxStations: 8, fare: 40 },
+      { maxStations: 10, fare: 50 }, { maxStations: 15, fare: 60 },
+      { maxStations: 20, fare: 70 }, { maxStations: 25, fare: 80 },
+      { maxStations: 30, fare: 90 }, { maxStations: Infinity, fare: 90 }
+    ];
+
+    // ----------------- Utils -----------------
+    function shortestPath(src, dst) {
+      if (src === dst) return [src];
+      const q = [src], prev = new Map(), seen = new Set([src]);
+      while (q.length) {
+        const cur = q.shift();
+        if (cur === dst) {
+          const path = [dst]; let x = dst;
+          while (x !== src) { x = prev.get(x); path.push(x); }
+          return path.reverse();
+        }
+        for (const nb of graph[cur] || []) {
+          if (!seen.has(nb)) { seen.add(nb); prev.set(nb, cur); q.push(nb); }
+        }
+      }
+      return null;
+    }
+
+    function edgeLine(prevLine, u, v) {
+      const common = [...(stationLines[u] || [])].filter(l => (stationLines[v] || new Set()).has(l));
+      if (prevLine && common.includes(prevLine)) return prevLine;
+      return common[0] || null;
+    }
+
+    function buildSegments(path) {
+      const segs = []; let prevLine = null;
+      for (let i = 0; i < path.length - 1; i++) {
+        const a = path[i], b = path[i + 1];
+        const line = edgeLine(prevLine, a, b);
+        const inter = (prevLine && line && line !== prevLine) ? { at: a, to: line, from: prevLine } : null;
+        segs.push({ from: a, to: b, line, interchange: inter, idx: i });
+        prevLine = line;
+      }
+      return segs;
+    }
+
+    function getBaseFare(stationsExclOrigin) {
+      if (stationsExclOrigin < 1) return 10;
+      for (let slab of fareSlabs) if (stationsExclOrigin <= slab.maxStations) return slab.fare;
+      return 90;
+    }
+
+    function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+    // ----------------- UI helpers -----------------
+    function filterStations(type) {
+      const input = document.getElementById(type);
+      const dd = document.getElementById(type + '-dropdown');
+      if (!input || !dd) return;
+      const val = input.value.toLowerCase();
+      dd.innerHTML = '';
+      const filtered = allStations.filter(st => st.toLowerCase().includes(val));
+      if (!filtered.length) { dd.style.display = 'none'; return; }
+      filtered.forEach(st => {
+        const d = document.createElement('div');
+        d.textContent = st;
+        d.onclick = () => { input.value = st; dd.style.display = 'none'; calculateFareAndRoute(); };
+        dd.appendChild(d);
+      });
+      dd.style.display = 'block';
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.icon-select')) {
+        ['source', 'destination'].forEach(id => {
+          const el = document.getElementById(id + '-dropdown'); if (el) el.style.display = 'none';
+        });
+      }
+    });
+    function showDropdown(t) { filterStations(t); }
+    function clearInput(t) { const el = document.getElementById(t); if (el) el.value = ''; calculateFareAndRoute(); }
+    function resetForm() { document.getElementById('source').value = ''; document.getElementById('destination').value = ''; calculateFareAndRoute(); }
+
+    // ----------------- Painting rails -----------------
+    // Instead of a single gradient, we draw one absolutely-positioned segment per visible gap.
+    function paintRails(timelineEl, listEl, path, segs) {
+      // remove old layer if any
+      const old = timelineEl.querySelector('.rail-layer');
+      if (old) old.remove();
+
+      // collect visible nodes
+      const nodes = [...listEl.querySelectorAll('.node')]
+        .filter(n => n.offsetParent !== null);
+
+      if (nodes.length < 2) return;
+
+      // create layer
+      const layer = document.createElement('div');
+      layer.className = 'rail-layer';
+      timelineEl.prepend(layer);
+
+      // compute X (center of the dots)
+      const firstDot = nodes[0].querySelector('.dot');
+      const tlRect = timelineEl.getBoundingClientRect();
+      const dotRect = firstDot.getBoundingClientRect();
+      const railWidth = 6;
+      const centerX = dotRect.left + dotRect.width/2 - tlRect.left; // relative to timeline
+      layer.style.left = (centerX - railWidth/2) + 'px';
+      layer.style.width = railWidth + 'px';
+
+      // station name -> path index map
+      const pathIndex = new Map(path.map((name, idx) => [name, idx]));
+
+      // draw segment between each consecutive visible node
+      for (let i = 0; i < nodes.length - 1; i++) {
+        const aNode = nodes[i];
+        const bNode = nodes[i+1];
+        const aDot = aNode.querySelector('.dot');
+        const bDot = bNode.querySelector('.dot');
+        const aRect = aDot.getBoundingClientRect();
+        const bRect = bDot.getBoundingClientRect();
+
+        const y1 = aRect.top + aRect.height/2 - tlRect.top;
+        const y2 = bRect.top + bRect.height/2 - tlRect.top;
+        const top = Math.min(y1, y2);
+        const height = Math.abs(y2 - y1);
+
+        // determine color: use the line of the first underlying segment from visible A to visible B
+        const aLabel = aNode.querySelector('.label').textContent;
+        const bLabel = bNode.querySelector('.label').textContent;
+        const iA = pathIndex.get(aLabel);
+        const iB = pathIndex.get(bLabel);
+        const firstSeg = segs[Math.min(iA, iB)]; // first seg leaving A along the path
+        const color = (firstSeg && firstSeg.line && lineColors[firstSeg.line]) ? lineColors[firstSeg.line] : '#cbd5e1';
+
+        const segDiv = document.createElement('div');
+        segDiv.className = 'rail-seg';
+        segDiv.style.top = top + 'px';
+        segDiv.style.height = height + 'px';
+        segDiv.style.background = color;
+
+        layer.appendChild(segDiv);
+      }
+    }
+
+    // ----------------- Rendering -----------------
+    function createStationNode(stationName, path, segs, interchangeMap) {
+      const i = path.indexOf(stationName);
+      const currentLine = (segs[i] && segs[i].line) || (segs[i - 1] && segs[i - 1].line);
+      const nodeColor = currentLine ? (lineColors[currentLine] || '#0f172a') : '#0f172a';
+
+      const nodeContainer = document.createElement('div');
+      const nodeRow = document.createElement('div');
+      nodeRow.className = 'node';
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.style.backgroundColor = nodeColor;
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = stationName;
+
+      nodeRow.appendChild(dot);
+      nodeRow.appendChild(label);
+      nodeContainer.appendChild(nodeRow);
+
+      const ic = interchangeMap[stationName];
+      if (ic) {
+        const metaEl = document.createElement('div');
+        metaEl.className = 'meta';
+        metaEl.innerHTML = `<i class="fa fa-right-left"></i> Change to <b>${capitalize(ic.to)} Line</b>`;
+        nodeContainer.appendChild(metaEl);
+      }
+      return nodeContainer;
+    }
+
+    function renderRoute(path, segs, container, badgesEl) {
+      container.innerHTML = '';
+      badgesEl.innerHTML = '';
+
+      const interchangesList = segs.filter(s => s.interchange).map(s => s.interchange.at);
+      badgesEl.innerHTML = `<span class="chip">${path.length - 1} stops</span> ${interchangesList.length ? `<span class="chip">${interchangesList.length} interchange(s)</span>` : ''}`;
+
+      const interchangeMap = {};
+      segs.forEach(s => { if (s.interchange) interchangeMap[s.interchange.at] = s.interchange; });
+
+      const timeline = document.createElement('div');
+      timeline.className = 'timeline';
+
+      const list = document.createElement('div');
+      list.className = 'station-list';
+
+      // Important nodes: start, every interchange, end
+      const importantIndices = [0, ...path.map((s, i) => i).filter(i => i > 0 && i < path.length - 1 && interchangeMap[path[i]]), path.length - 1];
+      const uniqueImportantIndices = [...new Set(importantIndices)];
+
+      for (let i = 0; i < uniqueImportantIndices.length - 1; i++) {
+        const startIdx = uniqueImportantIndices[i];
+        const endIdx = uniqueImportantIndices[i+1];
+
+        list.appendChild(createStationNode(path[startIdx], path, segs, interchangeMap));
+
+        const intermediates = path.slice(startIdx + 1, endIdx);
+        if (intermediates.length > 0) {
+          const collapsedContainer = document.createElement('div');
+          intermediates.forEach(st => collapsedContainer.appendChild(createStationNode(st, path, segs, interchangeMap)));
+
+          const count = intermediates.length;
+          const toggle = document.createElement('button');
+          toggle.className = 'toggle-btn';
+          toggle.type = 'button';
+          toggle.innerHTML = `<i class="fa fa-caret-down"></i> &nbsp;${count} intermediate station${count > 1 ? 's' : ''}`;
+
+          const hiddenBox = document.createElement('div');
+          hiddenBox.className = 'hidden';
+          hiddenBox.appendChild(collapsedContainer);
+
+          let open = false;
+          toggle.onclick = () => {
+            open = !open;
+            hiddenBox.className = open ? '' : 'hidden';
+            toggle.innerHTML = `<i class="fa ${open ? 'fa-caret-up' : 'fa-caret-down'}"></i> &nbsp;${open ? 'Hide' : 'Show'} ${count} intermediate station${count > 1 ? 's' : ''}`;
+            requestAnimationFrame(() => paintRails(timeline, list, path, segs));
+          };
+
+          list.appendChild(toggle);
+          list.appendChild(hiddenBox);
+        }
+      }
+      list.appendChild(createStationNode(path[path.length - 1], path, segs, interchangeMap));
+
+      timeline.appendChild(list);
+      container.appendChild(timeline);
+
+      // after DOM paints, draw rails
+      requestAnimationFrame(() => paintRails(timeline, list, path, segs));
+
+      // redraw on resize
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => paintRails(timeline, list, path, segs), 100);
+      }, { passive: true });
+    }
+
+    // ----------------- Main -----------------
+    function calculateFareAndRoute() {
+  const resultDiv = document.getElementById("result");
+  if (resultDiv) {
+    const oldInfo = resultDiv.querySelector('.travel-time-info');
+    if (oldInfo) oldInfo.remove();
+  }
+      const source = document.getElementById("source").value.trim();
+      const dest = document.getElementById("destination").value.trim();      const card = document.getElementById("routeCard");
+
+      card.style.display = "none";
+      const routeTimeline = document.getElementById("routeTimeline");
+      if (routeTimeline) routeTimeline.innerHTML = "";
+
+      if (!source || !dest) {
+        resultDiv.style.background = "#fffbe6";
+        resultDiv.style.color = "#b76607";
+        resultDiv.innerHTML = "Please select both <b>source</b> and <b>destination</b> stations.";
+        return;
+      }
+      if (source === dest) {
+        resultDiv.style.background = "#ffeaea";
+        resultDiv.style.color = "#b10019";
+        resultDiv.innerHTML = "Source and destination must be different.";
+        return;
+      }
+
+      const path = shortestPath(source, dest);
+      if (!path) {
+        resultDiv.style.background = "#ffeaea";
+        resultDiv.style.color = "#d32f2f";
+        resultDiv.innerHTML = "No valid metro route found between selected stations.";
+        return;
+      }
+      window.lastComputedPath = path;
+      const stationsExclOrigin = path.length - 1;
+      const baseFare = getBaseFare(stationsExclOrigin);
+      const cscPeakFare = baseFare * 0.95;
+      const cscNonPeakFare = baseFare * 0.90;
+      let fareHtml = `
+        <div style="margin-bottom:8px;">
+          <span style="color:#2563eb;font-weight:600;">Stations Travelled: ${stationsExclOrigin}</span>
+        </div>
+        <b>Token Fare:</b> ₹${baseFare.toFixed(2)}<br>
+        <b>CSC Fare (Peak Hours):</b> ₹${cscPeakFare.toFixed(2)}<br>
+        <b>CSC Fare (Non-Peak Hours):</b> ₹${cscNonPeakFare.toFixed(2)}
+      `;
+      resultDiv.style.background = "#f6f8ff";
+      resultDiv.style.color = "#222";
+      resultDiv.innerHTML = fareHtml;
+
+      const segs = buildSegments(path);
+      renderRoute(path, segs, document.getElementById("routeTimeline"), document.getElementById("routeBadges"));
+      card.style.display = "block";
+    }
+
+    window.onload = () => calculateFareAndRoute();
+  </script>
+
+
+<script>
+// === Travel Time Integration (using time.json) ===
+let __timeData = null;
+let __timeGraph = {}; // station -> neighbor -> minutes
+
+async function __loadTimeJson() {
+  try {
+    const res = await fetch('time.json', { cache: 'no-cache' });
+    __timeData = await res.json();
+    __buildTimeGraph(__timeData);
+    console.log('[time.json] loaded with', Object.keys(__timeGraph).length, 'stations');
+  } catch (e) {
+    console.warn('Failed to load time.json:', e);
+  }
+}
+
+function __buildTimeGraph(data) {
+  __timeGraph = {};
+  if (!data || !data.lines) return;
+  for (const [lineName, lineData] of Object.entries(data.lines)) {
+    const segments = (lineData && lineData.segments) || [];
+    for (const seg of segments) {
+      const from = seg.from, to = seg.to, t = Number(seg.time);
+      if (!from || !to || !isFinite(t)) continue;
+      if (!__timeGraph[from]) __timeGraph[from] = {};
+      if (!__timeGraph[to]) __timeGraph[to] = {};
+      __timeGraph[from][to] = t;
+      __timeGraph[to][from] = t; // treat as bidirectional
+    }
+  }
+}
+
+function computeTravelTimeForPath(path) {
+  if (!Array.isArray(path) || path.length < 2) return 0;
+  let total = 0;
+  for (let i = 0; i < path.length - 1; i++) {
+    const a = path[i], b = path[i+1];
+    const t = (__timeGraph[a] && __timeGraph[a][b]);
+    if (typeof t === 'number') {
+      total += t;
+    } else {
+      console.warn('Missing time for segment', a, '→', b);
+      // If a segment is missing in JSON, we skip it rather than guessing
+    }
+  }
+  return total;
+}
+
+// Hook into existing UI if a function called calculateFareAndRoute exists.
+// We'll wrap it to also show travel time.
+(function attachTravelTimeHook(){
+  const orig = window.calculateFareAndRoute;
+  if (typeof orig === 'function') {
+    window.calculateFareAndRoute = function(...args) {
+      const result = orig.apply(this, args);
+      try {
+        // Try to read a "currentPath" exposed globally, or from a known result area if available.
+        // Convention: many versions store computed path in window.lastComputedPath or return it.
+        const path = (window.lastComputedPath) || (result && result.path) || null;
+        const resultDiv = document.getElementById('result') || document.querySelector('#resultDiv, .result');
+        if (path && resultDiv) {
+          const minutes = computeTravelTimeForPath(path);
+          if (isFinite(minutes) && minutes >= 0) {
+            const info = document.createElement('div');
+            info.style.marginTop = '6px';
+            info.style.fontWeight = '600';
+            info.innerHTML = '<span style="color:#16a34a">Travel Time (no wait/transfer):</span> ' + minutes + ' min';
+            resultDiv.appendChild(info);
+          }
+        }
+      } catch(e) {
+        console.warn('Failed to append travel time:', e);
+      }
+      return result;
+    };
+  } else {
+    // If no existing function, expose a helper to render time for a provided path
+    window.renderTravelTimeForPath = function(path, containerId='result') {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      const minutes = computeTravelTimeForPath(path);
+      const info = document.createElement('div');
+      info.style.marginTop = '6px';
+      info.style.fontWeight = '600';
+      info.innerHTML = '<span style="color:#16a34a">Travel Time (no wait/transfer):</span> ' + minutes + ' min';
+      el.appendChild(info);
+      return minutes;
+    };
+  }
+})();
+
+// Ensure the time data is loaded early
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', __loadTimeJson);
+} else {
+  __loadTimeJson();
+}
+</script>
+
+</body>
+</html>
