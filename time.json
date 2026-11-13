@@ -98,11 +98,23 @@
         { "from": "Huskur Road", "to": "Biocon Hebbagodi", "time": 2 },
         { "from": "Biocon Hebbagodi", "to": "Delta Electronics Bommasandra", "time": 2 }
       ]
+    },
+
+    "pink": {
+      "color": "#e822a6",
+      "segments": [
+        { "from": "Kalena Agrahara", "to": "Hulimavu", "time": 2 },
+        { "from": "Hulimavu", "to": "Bilekahalli-IIMB", "time": 3 },
+        { "from": "Bilekahalli-IIMB", "to": "NS Palya-JP Nagar 4th Phase", "time": 4 },
+        { "from": "NS Palya-JP Nagar 4th Phase", "to": "Jayadeva Hospital", "time": 2 },
+        { "from": "Jayadeva Hospital", "to": "Suddagunte Palya", "time": 2 }
+      ]
     }
   },
 
   "interchanges": [
     { "station": "Majestic", "lines": ["purple", "green"] },
-    { "station": "RV Road", "lines": ["green", "yellow"] }
+    { "station": "RV Road", "lines": ["green", "yellow"] },
+    { "station": "Jayadeva Hospital", "lines": ["yellow", "pink"] }
   ]
 }
