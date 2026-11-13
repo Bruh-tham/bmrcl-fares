@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Namma Metro Fare Calculator & Route Visualizer</title>
+  <link rel="icon" type="image/png" href="https://english.bmrc.co.in/images/metro/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     :root {
@@ -61,7 +62,7 @@
     }
     body {
       background: var(--bg);
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--text-main);
       line-height: 1.5;
       padding-bottom: 50px;
@@ -205,10 +206,33 @@
       color: var(--primary);
       border-color: var(--border-focus);
     }
+    .btn-theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 38px;
+      padding: 7px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-subtle);
+      color: var(--text-sub);
+      font: 600 0.82rem 'DM Sans', sans-serif;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .btn-theme-toggle:hover {
+      border-color: var(--border-focus);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
     @media (max-width: 580px) {
       .btn-header-map {
         display: none; /* Safely hide from crushed mobile header; accessible in menu */
       }
+      .btn-theme-toggle { width: 38px; padding: 0; }
+      .theme-toggle-label { display: none; }
       .logo-img { height: 26px; }
       .title { font-size: 0.92rem; }
       .status-ticker-inner { font-size: 0.72rem; }
@@ -493,19 +517,6 @@
     }
     .fav-heart-btn.active {
       color: #e11d48;
-    }
-
-    /* Pink Line Badges */
-    .badge-pink-soon {
-      display: inline-block;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 6px;
-      background: var(--pink-badge);
-      color: var(--pink-badge-text);
-      border: 1px solid var(--pink-badge-border);
-      white-space: nowrap;
     }
 
     /* Swap Button */
@@ -949,6 +960,204 @@
     .toggle-btn:hover { background: #f1f5f9; }
     body.dark-mode .toggle-btn:hover { background: #0f172a; }
     .hidden { display:none; }
+
+    .title,
+    .home-intro h2,
+    .route-title,
+    .transit-guide-title,
+    .tt-line-name {
+      font-family: 'Manrope', 'DM Sans', sans-serif;
+    }
+
+    .app-layout {
+      max-width: 1180px;
+      margin-top: 24px;
+      gap: 20px;
+    }
+    @media (min-width: 880px) {
+      .app-layout {
+        grid-template-columns: minmax(340px, 410px) minmax(0, 1fr);
+        gap: 22px;
+      }
+    }
+    .home-intro {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 22px 24px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(37, 99, 235, 0.1), transparent 34%),
+        var(--surface);
+      box-shadow: var(--shadow-sm);
+    }
+    .home-intro-copy { min-width: 0; }
+    .home-eyebrow,
+    .home-intro h2 {
+      margin-top: 4px;
+      color: var(--text-main);
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      line-height: 1.2;
+    }
+    .home-intro p {
+      margin-top: 7px;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    .home-cta {
+      flex: 0 0 auto;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 15px;
+      background: var(--primary);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+    .home-cta:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .card,
+    .transit-guide-card {
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+    }
+    .timetable-modal-content {
+      max-width: 980px;
+      max-height: calc(100vh - 160px);
+      flex: 0 1 auto;
+      margin: 0 auto;
+      border: 1px solid var(--border);
+      border-radius: 0 0 16px 16px;
+    }
+    .app-modal#timetableModal {
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 24px 0;
+      background: rgba(15, 23, 42, 0.68);
+    }
+    .app-modal#timetableModal .modal-bar {
+      width: 95%;
+      max-width: 980px;
+      flex: 0 0 auto;
+      margin: 0 auto;
+      padding: 16px 20px;
+      border-radius: 16px 16px 0 0;
+      background: var(--surface);
+      color: var(--text-main);
+    }
+    .app-modal#timetableModal .modal-bar-close {
+      color: var(--text-main);
+      background: var(--surface-subtle);
+      border-color: var(--border);
+    }
+    .timetable-tabs {
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .tt-tab-btn {
+      flex: 0 0 auto;
+      min-width: 120px;
+      padding: 9px 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-subtle);
+      font-size: 0.84rem;
+    }
+    .tt-tab-btn.active {
+      border-color: var(--border-focus);
+      background: var(--primary-soft);
+    }
+    .timetable-body { padding: 20px; }
+    .tt-content-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .tt-line-name {
+      margin-top: 3px;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .tt-terminal-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-subtle);
+      color: var(--text-sub);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .tt-table-wrap {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .tt-schedule-table {
+      min-width: 600px;
+      margin-top: 0;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.86rem;
+    }
+    .tt-schedule-table th,
+    .tt-schedule-table td {
+      padding: 13px 14px;
+      border-width: 0 1px 1px 0;
+      vertical-align: top;
+    }
+    .tt-schedule-table tr > :last-child { border-right: 0; }
+    .tt-schedule-table tbody tr:last-child td { border-bottom: 0; }
+    .tt-schedule-table th {
+      padding-top: 11px;
+      padding-bottom: 11px;
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .tt-schedule-table tbody tr:hover { background: var(--primary-soft); }
+    .tt-pill {
+      gap: 8px;
+      padding: 5px 8px;
+      border-radius: 8px;
+      background: var(--surface-subtle);
+      font-size: 0.78rem;
+    }
+    .tt-pill-badge {
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.76rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .tt-first-train-time {
+      color: var(--primary);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    body.dark-mode .tt-line-name[data-line="purple"] { color: #c4a0ff !important; }
+    .tt-schedule-table td[rowspan] { vertical-align: middle; }
+    @media (max-width: 600px) {
+      .app-layout { margin-top: 14px; gap: 14px; }
+      .home-intro { align-items: flex-start; flex-direction: column; gap: 14px; padding: 19px; }
+      .home-cta { width: 100%; }
+      .timetable-body { padding: 14px; }
+      .tt-content-heading { align-items: flex-start; flex-direction: column; }
+      .tt-terminal-pill { border-radius: 10px; }
+      .app-modal#timetableModal .modal-bar { padding: 13px 14px; }
+    }
   </style>
 </head>
 <body>
@@ -979,6 +1188,10 @@
         <button type="button" class="btn-header-map" onclick="openMapModal()">
           <i class="fa-solid fa-map"></i> Network Map
         </button>
+        <button type="button" class="btn-theme-toggle" id="themeToggleButton" onclick="toggleDarkTheme()" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
+          <i class="fa-solid fa-moon" aria-hidden="true"></i>
+          <span class="theme-toggle-label">Dark mode</span>
+        </button>
         <button type="button" class="btn-icon-square" onclick="toggleDrawer(true)" aria-label="Open menu">
           <i class="fa-solid fa-bars"></i>
         </button>
@@ -1007,14 +1220,6 @@
 
     <div class="drawer-section-title">Display Preferences</div>
     <div class="drawer-row">
-      <span><i class="fa-solid fa-moon"></i> Dark Theme</span>
-      <label class="switch-label">
-        <input type="checkbox" id="themeToggleCheckbox" onchange="toggleDarkTheme(this.checked)">
-        <span class="slider"></span>
-      </label>
-    </div>
-
-    <div class="drawer-row">
       <span><i class="fa-solid fa-clock"></i> 24-Hour Time Format</span>
       <label class="switch-label">
         <input type="checkbox" id="timeFormatCheckbox" onchange="toggleTimeFormat(this.checked)">
@@ -1025,6 +1230,15 @@
 
   <!-- Main Grid Layout -->
   <main class="app-layout">
+    <div class="home-intro">
+      <div class="home-intro-copy">
+        <h2>Plan your journey</h2>
+        <p>Compare fares, find transfers, and check first and last train departures</p>
+      </div>
+      <button type="button" class="home-cta" onclick="openTimetableModal()">
+        <i class="fa-solid fa-calendar-days"></i> View timetables
+      </button>
+    </div>
     <section>
       <div class="card">
         <form autocomplete="off" onsubmit="event.preventDefault();">
@@ -1125,7 +1339,7 @@
           </li>
         </ul>
         <div class="info-footer-box">
-          <strong>Namma Metro Network:</strong> Purple Line, Green Line, Yellow Line, and Phase 2 Pink Line (Coming Soon). Click <em>Network Map</em> on the header for the complete network diagram.
+          <strong>Namma Metro Network:</strong> Purple Line, Green Line, Yellow Line, and Pink Line. Click <em>Network Map</em> on the header for the complete network diagram.
         </div>
       </div>
     </section>
@@ -1134,7 +1348,7 @@
   <!-- Interactive Timetable Modal -->
   <div class="app-modal" id="timetableModal" role="dialog" aria-modal="true">
     <div class="modal-bar">
-      <span class="modal-bar-title"><i class="fa-solid fa-calendar-days"></i> Namma Metro Timetable & First/Last Train Info</span>
+      <span class="modal-bar-title"><i class="fa-solid fa-calendar-days"></i> Namma Metro Timetables</span>
       <button class="modal-bar-close" onclick="closeTimetableModal()" aria-label="Close modal">&times;</button>
     </div>
     <div class="timetable-modal-content">
@@ -1165,9 +1379,18 @@
       purple: ["Challaghatta", "Kengeri", "Kengeri Bus Terminal", "Pattanagere", "Jnanabharathi", "Rajarajeshwari Nagar", "Pantharapalya-Nayandahalli", "Mysuru Road", "Deepanjali Nagar", "Attiguppe", "Vijayanagar", "Hosahalli", "Magadi Road", "KSR Railway Station", "Nadaprabhu Kempegowda Majestic", "Central College", "Vidhana Soudha", "Cubbon Park", "MG Road", "Trinity", "Halasuru", "Indiranagar", "Swami Vivekananda Road", "Baiyappanahalli", "Benniganahalli", "Krishnarajapura", "Singayyanapalya", "Garudacharpalya", "Hoodi", "Seetharam Palya", "Kundalahalli", "Nallur Halli", "Sri Sathya Sai Hospital", "Pattandur Agrahara", "Kadugodi Tree Park", "Hopefarm Channasandra", "Whitefield (Kadugodi)"],
       green: ["Madavara", "Chikkabidarakallu", "Manjunatha Nagar", "Nagasandra", "Dasarahalli", "Jalahalli", "Peenya Industry", "Peenya", "Goraguntepalya", "Yeshwanthpur", "Sandal Soap Factory", "Mahalakshmi", "Rajajinagar", "Mahakavi Kuvempu Road", "Srirampura", "Mantri Sq. Sampige Road", "Nadaprabhu Kempegowda Majestic", "Chickpete", "KR Market", "National College", "Lalbagh", "South End Circle", "Jayanagar", "RV Road", "Banashankari", "Jaya Prakash Nagar", "Yelachenahalli", "Konanakunte Cross", "Doddakallasandra", "Vajarahalli", "Thalaghattapura", "Silk Institute"],
       yellow: ["RV Road", "Ragigudda", "Jayadeva Hospital", "BTM Layout", "Central Silk Board", "Bommanahalli", "Hongasandra", "Kudlu Gate", "Singasandra", "Hosa Road", "Beratena Agrahara", "Electronic City", "Konappana Agrahara", "Huskur Road", "Hebbagodi", "Bommasandra"],
-      pink: ["Kalena Agrahara", "Hulimavu", "IIMB", "JP Nagar 4th Phase", "Jayadeva Hospital", "Tavarekere"]
+      pink: ["Kalena Agrahara", "Hulimavu", "Bilekahalli-IIMB", "NS Palya-JP Nagar 4th Phase", "Jayadeva Hospital", "Suddagunte Palya"]
     };
     const lineColors = { purple: "#6A1B9A", green: "#2E7D32", yellow: "#F9A825", pink: "#e822a6" };
+    function getLineDisplayColor(line) {
+      if (line === 'purple' && document.body.classList.contains('dark-mode')) return '#c4a0ff';
+      return lineColors[line] || '#0f172a';
+    }
+    const stationRenames = {
+      "IIMB": "Bilekahalli-IIMB",
+      "JP Nagar 4th Phase": "NS Palya-JP Nagar 4th Phase",
+      "Tavarekere": "Suddagunte Palya"
+    };
 
     const graph = {}, stationLines = {};
     for (const [line, stations] of Object.entries(lines)) {
@@ -1194,7 +1417,13 @@
     // ----------------- Favourites Storage Logic -----------------
     let favStations = [];
     try {
-      favStations = JSON.parse(localStorage.getItem('namma_metro_favs')) || [];
+      const savedFavourites = JSON.parse(localStorage.getItem('namma_metro_favs')) || [];
+      favStations = Array.isArray(savedFavourites)
+        ? [...new Set(savedFavourites.map(station => stationRenames[station] || station))]
+        : [];
+      if (JSON.stringify(favStations) !== JSON.stringify(savedFavourites)) {
+        localStorage.setItem('namma_metro_favs', JSON.stringify(favStations));
+      }
     } catch(e) {
       favStations = [];
     }
@@ -1222,7 +1451,7 @@
       purple: {
         name: "Purple Line",
         color: lineColors.purple,
-        terminals: "Challaghatta ↔ Whitefield (Kadugodi)",
+        terminals: "Challaghatta to Whitefield (Kadugodi)",
         schedules: [
           {
             day: "Monday",
@@ -1253,7 +1482,7 @@
       green: {
         name: "Green Line",
         color: lineColors.green,
-        terminals: "Madavara ↔ Silk Institute",
+        terminals: "Madavara to Silk Institute",
         schedules: [
           {
             day: "Monday",
@@ -1292,7 +1521,7 @@
       yellow: {
         name: "Yellow Line",
         color: lineColors.yellow,
-        terminals: "RV Road ↔ Bommasandra",
+        terminals: "RV Road to Bommasandra",
         schedules: [
           {
             day: "Monday",
@@ -1323,13 +1552,39 @@
       pink: {
         name: "Pink Line",
         color: lineColors.pink,
-        terminals: "Kalena Agrahara ↔ Tavarekere",
+        terminals: "Kalena Agrahara to Suddagunte Palya",
         schedules: [
           {
-            day: "All Days",
-            firstTrain: "Coming Soon",
+            day: "Monday",
+            firstDepartures: [
+              { station: "Kalena Agrahara", time: "04:55" },
+              { station: "Suddagunte Palya", time: "05:00" }
+            ],
             lastDepartures: [
-              { station: "Entire Corridor", time: "Coming Soon" }
+              { station: "Kalena Agrahara", time: "22:50" },
+              { station: "Suddagunte Palya", time: "22:54" }
+            ]
+          },
+          {
+            day: "Tuesday – Saturday",
+            firstDepartures: [
+              { station: "Kalena Agrahara", time: "06:00" },
+              { station: "Suddagunte Palya", time: "06:00" }
+            ],
+            lastDepartures: [
+              { station: "Kalena Agrahara", time: "22:50" },
+              { station: "Suddagunte Palya", time: "22:54" }
+            ]
+          },
+          {
+            day: "Sunday & Holidays",
+            firstDepartures: [
+              { station: "Kalena Agrahara", time: "07:00" },
+              { station: "Suddagunte Palya", time: "07:00" }
+            ],
+            lastDepartures: [
+              { station: "Kalena Agrahara", time: "22:50" },
+              { station: "Suddagunte Palya", time: "22:54" }
             ]
           }
         ]
@@ -1359,7 +1614,20 @@
         tue_sat: { start: "06:00", ends: { "RV Road": "23:55", "Bommasandra": "22:42", default: "23:55" } },
         sun_hol: { start: "07:00", ends: { "RV Road": "23:55", "Bommasandra": "22:42", default: "23:55" } }
       },
-      pink: null
+      pink: {
+        monday: {
+          starts: { "Kalena Agrahara": "04:55", "Suddagunte Palya": "05:00", default: "04:55" },
+          ends: { "Kalena Agrahara": "22:50", "Suddagunte Palya": "22:54", default: "22:50" }
+        },
+        tue_sat: {
+          starts: { "Kalena Agrahara": "06:00", "Suddagunte Palya": "06:00", default: "06:00" },
+          ends: { "Kalena Agrahara": "22:50", "Suddagunte Palya": "22:54", default: "22:50" }
+        },
+        sun_hol: {
+          starts: { "Kalena Agrahara": "07:00", "Suddagunte Palya": "07:00", default: "07:00" },
+          ends: { "Kalena Agrahara": "22:50", "Suddagunte Palya": "22:54", default: "22:50" }
+        }
+      }
     };
 
     function getLineScheduleForDay(lineName, date) {
@@ -1384,8 +1652,8 @@
       const now = new Date();
       const currentMin = now.getHours() * 60 + now.getMinutes();
 
-      if (!firstLine || firstLine === 'pink') {
-        return { inService: false, isNonPeak: false, isPeak: false, statusText: "Service Hours: NA / Coming Soon" };
+      if (!firstLine) {
+        return { inService: false, isNonPeak: false, isPeak: false, statusText: "Service Hours: NA" };
       }
 
       const sched = getLineScheduleForDay(firstLine, now);
@@ -1393,7 +1661,10 @@
         return { inService: false, isNonPeak: false, isPeak: false, statusText: "Schedule NA" };
       }
 
-      const startMin = toMinutes(sched.start);
+      const startStr = sched.starts
+        ? (sched.starts[originStation] || sched.starts.default)
+        : sched.start;
+      const startMin = toMinutes(startStr);
       let endStr = sched.ends[originStation] || sched.ends.default;
       const endMin = toMinutes(endStr);
 
@@ -1421,6 +1692,26 @@
       };
     }
 
+    function getOperatingLines(date) {
+      const currentMin = date.getHours() * 60 + date.getMinutes();
+      return Object.keys(lineSchedules).filter(lineName => {
+        const schedule = getLineScheduleForDay(lineName, date);
+        if (!schedule) return false;
+
+        const starts = schedule.starts
+          ? Object.entries(schedule.starts)
+              .filter(([station]) => station !== 'default')
+              .map(([, time]) => toMinutes(time))
+          : [toMinutes(schedule.start)];
+        const ends = Object.entries(schedule.ends)
+          .filter(([station]) => station !== 'default')
+          .map(([, time]) => toMinutes(time));
+
+        return starts.some(start => currentMin >= start) &&
+          ends.some(end => currentMin <= end);
+      });
+    }
+
     // ----------------- Clock & Real-time Ticker -----------------
     let is24HourFormat = localStorage.getItem('metro_24h') === 'true';
 
@@ -1446,20 +1737,23 @@
       document.getElementById('liveDateStr').textContent = dateStr;
       document.getElementById('liveTimeStr').textContent = timeStr;
 
-      const defaultState = getFarePeriodState("Nadaprabhu Kempegowda Majestic", "purple");
       const tag = document.getElementById('fareStatusTag');
-      if (!defaultState.inService) {
-        tag.textContent = defaultState.statusText;
+      const serviceOpen = getOperatingLines(now).length > 0;
+      const currentMin = now.getHours() * 60 + now.getMinutes();
+      const isPeak = (currentMin >= 8 * 60 && currentMin < 12 * 60) ||
+        (currentMin >= 16 * 60 && currentMin < 21 * 60);
+      if (!serviceOpen) {
+        tag.textContent = "Metro Service Closed";
         tag.style.background = 'var(--surface-subtle)';
         tag.style.color = 'var(--text-muted)';
-      } else if (defaultState.isNonPeak) {
-        tag.textContent = defaultState.statusText;
-        tag.style.background = 'var(--accent-green-bg)';
-        tag.style.color = 'var(--accent-green)';
-      } else {
-        tag.textContent = defaultState.statusText;
+      } else if (isPeak) {
+        tag.textContent = "Peak Hours Active";
         tag.style.background = 'var(--primary-soft)';
         tag.style.color = 'var(--primary)';
+      } else {
+        tag.textContent = "Non-Peak Hours Active";
+        tag.style.background = 'var(--accent-green-bg)';
+        tag.style.color = 'var(--accent-green)';
       }
 
       syncFareCardHighlighting();
@@ -1509,14 +1803,29 @@
     }
 
     // ----------------- Dark Mode -----------------
+    function updateThemeToggle(enable) {
+      const button = document.getElementById('themeToggleButton');
+      const icon = button.querySelector('i');
+      const label = button.querySelector('.theme-toggle-label');
+      const action = enable ? 'Switch to light mode' : 'Switch to dark mode';
+      button.setAttribute('aria-pressed', String(enable));
+      button.setAttribute('aria-label', action);
+      button.title = action;
+      icon.className = `fa-solid ${enable ? 'fa-sun' : 'fa-moon'}`;
+      label.textContent = enable ? 'Light mode' : 'Dark mode';
+    }
+
     function toggleDarkTheme(enable) {
+      if (typeof enable !== 'boolean') {
+        enable = !document.body.classList.contains('dark-mode');
+      }
       document.body.classList.toggle('dark-mode', enable);
       localStorage.setItem('metro_dark', enable);
+      updateThemeToggle(enable);
     }
-    if (localStorage.getItem('metro_dark') === 'true') {
-      document.body.classList.add('dark-mode');
-      document.getElementById('themeToggleCheckbox').checked = true;
-    }
+    const darkModeEnabled = localStorage.getItem('metro_dark') === 'true';
+    document.body.classList.toggle('dark-mode', darkModeEnabled);
+    updateThemeToggle(darkModeEnabled);
     if (is24HourFormat) {
       document.getElementById('timeFormatCheckbox').checked = true;
     }
@@ -1559,7 +1868,7 @@
         const item = timetablesData[key];
         const btn = document.createElement('button');
         btn.className = `tt-tab-btn ${key === currentTimetableLine ? 'active' : ''}`;
-        btn.innerHTML = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:${item.color}; margin-right:6px;"></span>${item.name}`;
+        btn.innerHTML = `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:${getLineDisplayColor(key)}; margin-right:6px;"></span>${item.name}`;
         btn.onclick = () => {
           currentTimetableLine = key;
           renderTimetableTabs();
@@ -1574,42 +1883,72 @@
       const item = timetablesData[key];
       if (!item) return;
 
-      let schedRows = item.schedules.map(s => {
+      const lastDepartureRowspans = new Array(item.schedules.length).fill(0);
+      for (let index = 0; index < item.schedules.length;) {
+        let rowspan = 1;
+        const departures = item.schedules[index].lastDepartures;
+        while (index + rowspan < item.schedules.length) {
+          const nextDepartures = item.schedules[index + rowspan].lastDepartures;
+          const sameDepartures = departures.length === nextDepartures.length &&
+            departures.every((departure, departureIndex) =>
+              departure.station === nextDepartures[departureIndex].station &&
+              departure.time === nextDepartures[departureIndex].time
+            );
+          if (!sameDepartures) break;
+          rowspan++;
+        }
+        lastDepartureRowspans[index] = rowspan;
+        index += rowspan;
+      }
+
+      let schedRows = item.schedules.map((s, index) => {
+        const firstDepartures = s.firstDepartures || [];
+        const sameTerminalTime = firstDepartures.length > 1 &&
+          firstDepartures.every(departure => departure.time === firstDepartures[0].time);
+        let firstDepartureHtml = sameTerminalTime
+          ? `<span class="tt-first-train-time">${firstDepartures[0].time}</span>`
+          : s.firstDepartures
+          ? `<div class="tt-pills-wrap">${firstDepartures.map(d => `
+              <div class="tt-pill">
+                <span class="tt-pill-badge">${d.time}</span>
+                <span>${d.station}</span>
+              </div>
+            `).join('')}</div>`
+          : `<span class="tt-first-train-time">${s.firstTrain}</span>`;
         let pillsHtml = s.lastDepartures.map(d => `
           <div class="tt-pill">
             <span class="tt-pill-badge">${d.time}</span>
             <span>${d.station}</span>
           </div>
         `).join('');
+        const lastDeparturesCell = lastDepartureRowspans[index]
+          ? `<td rowspan="${lastDepartureRowspans[index]}"><div class="tt-pills-wrap">${pillsHtml}</div></td>`
+          : '';
 
         return `
           <tr>
             <td style="white-space: nowrap;"><strong>${s.day}</strong></td>
-            <td style="white-space: nowrap;"><span style="font-weight:600; color:var(--primary);">${s.firstTrain}</span></td>
-            <td>
-              <div class="tt-pills-wrap">
-                ${pillsHtml}
-              </div>
-            </td>
+            <td>${firstDepartureHtml}</td>
+            ${lastDeparturesCell}
           </tr>
         `;
       }).join('');
 
       body.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+        <div class="tt-content-heading">
           <div>
-            <h3 style="color:${item.color}; font-size:1.1rem; font-weight:700;">${item.name}</h3>
-            <span style="font-size:0.84rem; color:var(--text-muted);">${item.terminals}</span>
+            <h3 class="tt-line-name" data-line="${key}" style="color:${getLineDisplayColor(key)};">${item.name}</h3>
           </div>
+          <div class="tt-terminal-pill">${item.terminals}</div>
         </div>
 
         <div class="tt-table-wrap">
           <table class="tt-schedule-table">
             <thead>
               <tr>
-                <th>Days of Operation</th>
-                <th>First Departure</th>
-                <th>Last Train Departures</th>
+                <th>Operating day</th>
+                <th>First trains</th>
+                <th>Last trains</th>
               </tr>
             </thead>
             <tbody>
@@ -1709,14 +2048,40 @@
       return common[0] || null;
     }
 
+    function getLineDirection(lineName, from, to) {
+      const stations = lines[lineName];
+      const fromIndex = stations.indexOf(from);
+      const toIndex = stations.indexOf(to);
+      if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return 0;
+      return toIndex > fromIndex ? 1 : -1;
+    }
+
+    function getTerminalForDirection(lineName, direction) {
+      const stations = lines[lineName];
+      return direction > 0 ? stations[stations.length - 1] : stations[0];
+    }
+
     function buildSegments(path) {
       const segs = []; let prevLine = null;
+      let prevDirection = 0;
       for (let i = 0; i < path.length - 1; i++) {
         const a = path[i], b = path[i + 1];
         const line = edgeLine(prevLine, a, b);
-        const inter = (prevLine && line && line !== prevLine) ? { at: a, to: line, from: prevLine } : null;
+        const direction = line ? getLineDirection(line, a, b) : 0;
+        const lineChange = Boolean(prevLine && line && line !== prevLine);
+        const reversal = Boolean(prevLine && line === prevLine && prevDirection && direction && prevDirection !== direction);
+        const inter = lineChange || reversal
+          ? {
+              at: a,
+              to: line,
+              from: prevLine,
+              reversal,
+              terminal: getTerminalForDirection(line, direction)
+            }
+          : null;
         segs.push({ from: a, to: b, line, interchange: inter, idx: i });
         prevLine = line;
+        prevDirection = direction;
       }
       return segs;
     }
@@ -1799,13 +2164,6 @@
       rightWrap.style.display = 'flex';
       rightWrap.style.alignItems = 'center';
       rightWrap.style.gap = '8px';
-
-      if (lines.pink.includes(st) && !lines.yellow.includes(st) && !lines.green.includes(st) && !lines.purple.includes(st)) {
-        const badge = document.createElement('span');
-        badge.className = 'badge-pink-soon';
-        badge.textContent = 'Pink Line (Soon)';
-        rightWrap.appendChild(badge);
-      }
 
       const heartBtn = document.createElement('i');
       heartBtn.className = `fa-heart fav-heart-btn ${isFav ? 'fa-solid active' : 'fa-regular'}`;
@@ -1891,8 +2249,6 @@
       layer.style.left = (centerX - railWidth / 2) + 'px';
       layer.style.width = railWidth + 'px';
 
-      const pathIndex = new Map(path.map((name, idx) => [name, idx]));
-
       for (let i = 0; i < nodes.length - 1; i++) {
         const aNode = nodes[i];
         const bNode = nodes[i + 1];
@@ -1906,14 +2262,12 @@
         const top = Math.min(y1, y2);
         const height = Math.abs(y2 - y1);
 
-        const aLabel = aNode.getAttribute('data-station');
-        const bLabel = bNode.getAttribute('data-station');
-        const iA = pathIndex.get(aLabel);
-        const iB = pathIndex.get(bLabel);
+        const iA = Number(aNode.getAttribute('data-index'));
+        const iB = Number(bNode.getAttribute('data-index'));
         
         const minIdx = Math.min(iA, iB);
         const firstSeg = segs[minIdx];
-        const color = (firstSeg && firstSeg.line && lineColors[firstSeg.line]) ? lineColors[firstSeg.line] : '#cbd5e1';
+        const color = firstSeg && firstSeg.line ? getLineDisplayColor(firstSeg.line) : '#cbd5e1';
 
         const segDiv = document.createElement('div');
         segDiv.className = 'rail-seg';
@@ -1926,15 +2280,16 @@
     }
 
     // ----------------- Node & Route Rendering -----------------
-    function createStationNode(stationName, path, segs, interchangeMap) {
-      const i = path.indexOf(stationName);
-      const currentLine = (segs[i] && segs[i].line) || (segs[i - 1] && segs[i - 1].line);
-      const nodeColor = currentLine ? (lineColors[currentLine] || '#0f172a') : '#0f172a';
+    function createStationNode(stationName, stationIndex, segs, transitionMap) {
+      const currentLine = (segs[stationIndex] && segs[stationIndex].line) ||
+        (segs[stationIndex - 1] && segs[stationIndex - 1].line);
+      const nodeColor = currentLine ? getLineDisplayColor(currentLine) : '#0f172a';
 
       const nodeContainer = document.createElement('div');
       const nodeRow = document.createElement('div');
       nodeRow.className = 'node';
       nodeRow.setAttribute('data-station', stationName);
+      nodeRow.setAttribute('data-index', stationIndex);
 
       const dot = document.createElement('div');
       dot.className = 'dot';
@@ -1944,24 +2299,19 @@
       label.className = 'label';
       label.textContent = stationName;
 
-      if (currentLine === 'pink') {
-        const soonSpan = document.createElement('span');
-        soonSpan.className = 'badge-pink-soon';
-        soonSpan.style.marginLeft = '8px';
-        soonSpan.textContent = 'Coming Soon';
-        label.appendChild(soonSpan);
-      }
-
       nodeRow.appendChild(dot);
       nodeRow.appendChild(label);
       nodeContainer.appendChild(nodeRow);
 
-      const ic = interchangeMap[stationName];
-      if (ic) {
+      const transition = transitionMap.get(stationIndex);
+      if (transition) {
         const metaEl = document.createElement('div');
         metaEl.className = 'meta';
-        const isPinkTarget = ic.to === 'pink';
-        metaEl.innerHTML = `<i class="fa-solid fa-right-left"></i> Change to <b style="color:${lineColors[ic.to] || 'inherit'}">${capitalize(ic.to)} Line</b> ${isPinkTarget ? '<span class="badge-pink-soon">Coming Soon</span>' : ''}`;
+        const lineName = `${capitalize(transition.to)} Line`;
+        const instruction = transition.reversal
+          ? `Alight and cross to the opposite platform, then board towards <b>${transition.terminal}</b>`
+          : `Change to <b style="color:${getLineDisplayColor(transition.to)}">${lineName}</b> towards <b>${transition.terminal}</b>`;
+        metaEl.innerHTML = `<i class="fa-solid fa-right-left"></i> ${instruction}`;
         nodeContainer.appendChild(metaEl);
       }
       return nodeContainer;
@@ -1971,7 +2321,7 @@
       container.innerHTML = '';
       badgesEl.innerHTML = '';
 
-      const interchangesList = segs.filter(s => s.interchange).map(s => s.interchange.at);
+      const interchangesList = segs.filter(s => s.interchange && !s.interchange.reversal);
       const actuallyRidingPink = segs.some(s => s.line === 'pink');
 
       badgesEl.innerHTML = `
@@ -1980,8 +2330,8 @@
         ${actuallyRidingPink ? `<span class="chip" style="background:var(--pink-badge);color:var(--pink-badge-text);border-color:var(--pink-badge-border);">Includes Pink Line</span>` : ''}
       `;
 
-      const interchangeMap = {};
-      segs.forEach(s => { if (s.interchange) interchangeMap[s.interchange.at] = s.interchange; });
+      const transitionMap = new Map();
+      segs.forEach(s => { if (s.interchange) transitionMap.set(s.idx, s.interchange); });
 
       const timeline = document.createElement('div');
       timeline.className = 'timeline';
@@ -1989,21 +2339,21 @@
       const list = document.createElement('div');
       list.className = 'station-list';
 
-      const importantIndices = [0, ...path.map((s, i) => i).filter(i => i > 0 && i < path.length - 1 && interchangeMap[path[i]]), path.length - 1];
+      const importantIndices = [0, ...path.map((s, i) => i).filter(i => i > 0 && i < path.length - 1 && transitionMap.has(i)), path.length - 1];
       const uniqueImportantIndices = [...new Set(importantIndices)];
 
       for (let i = 0; i < uniqueImportantIndices.length - 1; i++) {
         const startIdx = uniqueImportantIndices[i];
         const endIdx = uniqueImportantIndices[i + 1];
 
-        list.appendChild(createStationNode(path[startIdx], path, segs, interchangeMap));
+        list.appendChild(createStationNode(path[startIdx], startIdx, segs, transitionMap));
 
-        const intermediates = path.slice(startIdx + 1, endIdx);
-        if (intermediates.length > 0) {
+        const intermediateIndices = path.map((_, idx) => idx).filter(idx => idx > startIdx && idx < endIdx);
+        if (intermediateIndices.length > 0) {
           const collapsedContainer = document.createElement('div');
-          intermediates.forEach(st => collapsedContainer.appendChild(createStationNode(st, path, segs, interchangeMap)));
+          intermediateIndices.forEach(idx => collapsedContainer.appendChild(createStationNode(path[idx], idx, segs, transitionMap)));
 
-          const count = intermediates.length;
+          const count = intermediateIndices.length;
           const toggle = document.createElement('button');
           toggle.className = 'toggle-btn';
           toggle.type = 'button';
@@ -2025,7 +2375,7 @@
           list.appendChild(hiddenBox);
         }
       }
-      list.appendChild(createStationNode(path[path.length - 1], path, segs, interchangeMap));
+      list.appendChild(createStationNode(path[path.length - 1], path.length - 1, segs, transitionMap));
 
       timeline.appendChild(list);
       container.appendChild(timeline);
@@ -2156,6 +2506,7 @@
       for (const [, lineData] of Object.entries(data.lines)) {
         const segments = (lineData && lineData.segments) || [];
         for (const seg of segments) {
+          if (seg.time === null || seg.time === undefined || seg.time === '') continue;
           const from = seg.from, to = seg.to, t = Number(seg.time);
           if (!from || !to || !isFinite(t)) continue;
           if (!__timeGraph[from]) __timeGraph[from] = {};
@@ -2172,7 +2523,8 @@
       for (let i = 0; i < path.length - 1; i++) {
         const a = path[i], b = path[i + 1];
         const t = (__timeGraph[a] && __timeGraph[a][b]);
-        if (typeof t === 'number') total += t;
+        if (typeof t !== 'number') return null;
+        total += t;
       }
       return total;
     }
@@ -2187,7 +2539,7 @@
             const container = document.getElementById('travelTimePlaceholder');
             if (path && container) {
               const minutes = computeTravelTimeForPath(path);
-              if (isFinite(minutes) && minutes > 0) {
+              if (minutes !== null && isFinite(minutes) && minutes > 0) {
                 container.innerHTML = `
                   <div class="fare-time-bar">
                     <span><i class="fa-regular fa-clock"></i> Travel Time (approx)</span>
